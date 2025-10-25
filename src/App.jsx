@@ -1,28 +1,46 @@
-import { useState } from 'react'
+import React, { useEffect, useState } from 'react';
+import Navbar from './components/Navbar';
+import HomeSections from './components/HomeSections';
+import ProjectsMedia from './components/ProjectsMedia';
+import ContactFooter from './components/ContactFooter';
+import { ArrowUp } from 'lucide-react';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [showTop, setShowTop] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => {
+      setShowTop(window.scrollY > 400);
+    };
+    window.addEventListener('scroll', onScroll);
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 flex items-center justify-center">
-      <div className="bg-white p-8 rounded-lg shadow-lg">
-        <h1 className="text-3xl font-bold text-gray-800 mb-4">
-          Vibe Coding Platform
-        </h1>
-        <p className="text-gray-600 mb-6">
-          Your AI-powered development environment
-        </p>
-        <div className="text-center">
-          <button
-            onClick={() => setCount(count + 1)}
-            className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"
-          >
-            Count is {count}
-          </button>
-        </div>
-      </div>
+    <div className="min-h-screen bg-white text-gray-900">
+      <Navbar />
+
+      <main>
+        <section id="home"><HomeSections /></section>
+        <section id="projects"><ProjectsMedia /></section>
+        <section id="contact"><ContactFooter /></section>
+      </main>
+
+      {showTop && (
+        <button
+          onClick={scrollToTop}
+          aria-label="Back to top"
+          className="fixed bottom-6 right-6 z-50 rounded-full bg-[#004225] p-3 text-white shadow-lg transition hover:bg-[#00341d] focus:outline-none focus:ring-2 focus:ring-[#D4AF37]"
+        >
+          <ArrowUp className="h-5 w-5" />
+        </button>
+      )}
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
